@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Sync Data Storage</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        /* Copying original styles to maintain UI consistency */
+        :root {
+            --primary: #FF9933;
+            --secondary: #FF7722;
+            --accent: #800080;
+            --text-light: #FFF;
+            --text-dark: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Sanskrit Text', 'Segoe UI', serif;
+        }
+
+        body {
+            background: #000 url('/api/placeholder/2000/1000') center/cover fixed;
+            color: var(--text-light);
+            line-height: 1.6;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .data-table {
+            width: 100%;
+            background: rgba(128, 0, 128, 0.2);
+            border-radius: 15px;
+            border: 2px solid #FF9933;
+            margin-top: 2rem;
+            overflow: hidden;
+        }
+
+        .data-table table {
+            width: 100%;
+            border-collapse: collapse;
+            color: white;
+        }
+
+        .data-table th, .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 153, 51, 0.3);
+        }
+
+        .data-table th {
+            background: rgba(255, 153, 51, 0.2);
+            color: #FF9933;
+        }
+
+        .data-table tr:hover {
+            background: rgba(255, 153, 51, 0.1);
+        }
+
+        .controls {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        button {
+            background: linear-gradient(45deg, #FF9933, #FF7722);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .header {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(128, 0, 128, 0.2);
+            border-radius: 15px;
+            border: 2px solid #FF9933;
+        }
+
+        .header h1 {
+            color: #FF9933;
+            margin-bottom: 1rem;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 2rem;
+            color: #FF9933;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>॥ Soul Sync Data Storage ॥</h1>
+            <p>Ancient Wisdom Records</p>
+        </div>
+
+        <div class="data-table">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Name 1</th>
+                        <th>Name 2</th>
+                        <th>Gender</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="controls">
+            <button onclick="clearData()">Clear All Data</button>
+            <button onclick="exportData()">Export Data</button>
+        </div>
+    </div>
+
+    <script>
+        // Listen for storage events from the main page
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'soulSyncData') {
+                displayData();
+            }
+        });
+
+        // Function to save data (to be called from main page)
+        function saveFormData(name1, name2, gender) {
+            const timestamp = new Date().toLocaleString();
+            const data = {
+                timestamp,
+                name1,
+                name2,
+                gender
+            };
+
+            // Get existing data
+            let existingData = JSON.parse(localStorage.getItem('soulSyncData') || '[]');
+            existingData.push(data);
+            
+            // Save updated data
+            localStorage.setItem('soulSyncData', JSON.stringify(existingData));
+            
+            // Update display
+            displayData();
+        }
+
+        // Function to display data
+        function displayData() {
+            const tableBody = document.getElementById('tableBody');
+            const data = JSON.parse(localStorage.getItem('soulSyncData') || '[]');
+            
+            if (data.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="no-data">No records found</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tableBody.innerHTML = data.map(entry => `
+                <tr>
+                    <td>${entry.timestamp}</td>
+                    <td>${entry.name1}</td>
+                    <td>${entry.name2}</td>
+                    <td>${entry.gender}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Function to clear all data
+        function clearData() {
+            if (confirm('Are you sure you want to clear all records?')) {
+                localStorage.removeItem('soulSyncData');
+                displayData();
+            }
+        }
+
+        // Function to export data
+        function exportData() {
+            const data = localStorage.getItem('soulSyncData') || '[]';
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'soul-sync-data.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Initial display
+        displayData();
+    </script>
+</body>
+</html>

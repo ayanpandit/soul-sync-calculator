@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Sync Calculator - Ancient Vedic Wisdom</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF9933;
+            --secondary: #FF7722;
+            --accent: #800080;
+            --text-light: #FFF;
+            --text-dark: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Sanskrit Text', 'Segoe UI', serif;
+        }
+
+        body {
+            background: #000 url('/api/placeholder/2000/1000') center/cover fixed;
+            color: var(--text-light);
+            line-height: 1.6;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: -1;
+        }
+
+        .om-symbol {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            opacity: 0.5;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            background: rgba(128, 0, 128, 0.3);
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            border: 2px solid #FF9933;
+            background-image: url('/api/placeholder/1000/300');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 13px;
+        }
+
+        header * {
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #FF9933;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 1rem;
+            font-family: 'Sanskrit Text', serif;
+        }
+
+        .sanskrit-text {
+            font-size: 1.2rem;
+            color: #FFF;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .calculator-form {
+            background: rgba(128, 0, 128, 0.2);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+            border: 1px solid #FF9933;
+        }
+
+        .form-decoration {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-decoration img {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            color: #FF9933;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #FF9933;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        button {
+            background: linear-gradient(45deg, #FF9933, #FF7722);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            width: 100%;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        .result-container {
+            display: none;
+            padding: 2rem;
+            background: rgba(128, 0, 128, 0.2);
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            text-align: center;
+            border: 2px solid #FF9933;
+        }
+
+        .relationship-type {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #FF9933;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .compatibility-percentage {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            color: #FF9933;
+            /* Use solid color instead of gradient */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3)
+        }
+
+        .calculation-steps {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: left;
+            border: 1px solid #FF9933;
+        }
+
+        .planetary-info {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .faq-section {
+            margin-top: 3rem;
+        }
+
+        .faq-item {
+            background: rgba(128, 0, 128, 0.2);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            border: 1px solid #FF9933;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+            color: #FF9933;
+            transition: all 0.3s;
+        }
+
+        .faq-question:hover {
+            background: rgba(255, 153, 51, 0.1);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s ease-out;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 1.5rem;
+            max-height: 1000px;
+        }
+
+        .blog-section {
+            margin-top: 3rem;
+        }
+
+        .blog-card {
+            background: rgba(128, 0, 128, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #FF9933;
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border: 2px solid #FF9933;
+        }
+
+        .blog-title {
+            color: #FF9933;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-content {
+            line-height: 1.8;
+        }
+
+        .contact-form {
+            margin-top: 3rem;
+            background: rgba(128, 0, 128, 0.2);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid #FF9933;
+        }
+
+        .mandala-decoration {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .mandala-left {
+            left: -100px;
+            top: 50%;
+        }
+
+        .mandala-right {
+            right: -100px;
+            bottom: 50%;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .mandala-decoration {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        /* Share Modal Styles */
+        .share-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            /* Reduced padding */
+            overflow-y: auto;
+            /* Enable vertical scrolling */
+        }
+
+        .share-content {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #FF9933;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 95%;
+            /* Increased width */
+            position: relative;
+            color: white;
+            backdrop-filter: blur(10px);
+            margin: 20px auto;
+            /* Add margin to ensure spacing at top and bottom */
+            max-height: 90vh;
+            /* Maximum height */
+            overflow-y: auto;
+            /* Enable scrolling within the content */
+        }
+
+        .share-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .share-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+
+        .share-content::-webkit-scrollbar-thumb {
+            background: #FF9933;
+            border-radius: 4px;
+        }
+
+        .share-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #FF9933;
+        }
+
+        .share-result {
+            background: rgba(128, 0, 128, 0.2);
+            padding: 1.2rem;
+            /* Slightly reduced padding */
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid #FF9933;
+            word-break: break-word;
+            /* Prevent text overflow */
+        }
+
+        .close-share {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #FF9933;
+            font-size: 24px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #FF9933;
+            border-radius: 50%;
+        }
+
+        .screenshot-btn {
+            background: linear-gradient(45deg, #FF9933, #FF7722);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            width: 100%;
+            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Adjust font sizes for mobile */
+        @media (max-width: 768px) {
+            .share-content {
+                padding: 1.5rem;
+                /* Reduced padding on mobile */
+                width: 98%;
+                /* Almost full width on mobile */
+                margin: 10px auto;
+                /* Reduced margin */
+            }
+
+            .share-header {
+                font-size: 1.5rem;
+                /* Smaller header on mobile */
+            }
+
+            .share-result {
+                padding: 1rem;
+                /* Reduced padding */
+            }
+
+            /* Adjust content font sizes */
+            .share-result h3 {
+                font-size: 1.3rem;
+            }
+
+            .share-result div {
+                font-size: 1rem !important;
+                /* Override any inline styles */
+            }
+        }
+
+        /* Ensure the close button stays visible */
+        .close-share {
+            position: sticky;
+            float: right;
+            top: 10px;
+            margin-bottom: 10px;
+            z-index: 1001;
+            background: rgba(0, 0, 0, 0.7);
+            /* Add background to make it stand out */
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: rgba(128, 0, 128, 0.2);
+            border-top: 2px solid #FF9933;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section {
+            color: white;
+        }
+
+        .footer-section h3 {
+            color: #FF9933;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #FF9933;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 153, 51, 0.3);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <img src="om.png" alt="Om Symbol" class="om-symbol">
+    <div class="container">
+        <header class="animate__animated animate__fadeIn">
+            <h1>॥ Soul Sync Calculator ॥</h1>
+            <div class="sanskrit-text">॥ जीवन साथी योग्यता ॥</div>
+            <p>Ancient Vedic Wisdom for Modern Love</p>
+        </header>
+
+        <div class="calculator-form animate__animated animate__fadeInUp">
+            <div class="form-decoration">
+                <img src="kalash.png" alt="Kalash Decoration">
+            </div>
+            <div class="input-group">
+                <label for="gender">Your Gender:</label>
+                <select id="gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="male">Male (पुरुष)</option>
+                    <option value="female">Female (स्त्री)</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="name1">Your Name (आपका नाम):</label>
+                <input type="text" id="name1" required placeholder="Enter your name">
+            </div>
+
+            <div class="input-group">
+                <label for="name2">Their Name (उनका नाम):</label>
+                <input type="text" id="name2" required placeholder="Enter their name">
+            </div>
+
+            <button onclick="calculateCompatibility()">Calculate Destiny</button>
+        </div>
+
+        <div id="result" class="result-container animate__animated animate__fadeIn">
+
+            <div class="relationship-type"></div>
+            <div class="compatibility-percentage"></div>
+            <div class="calculation-steps"></div>
+            <div class="planetary-info"></div>
+        </div>
+        <!-- Share Modal -->
+        <div class="share-modal" id="shareModal">
+            <div class="share-content">
+                <span class="close-share" onclick="closeShare()">×</span>
+                <h2 class="share-header">॥ Your Divine Connection ॥</h2>
+                <div class="share-result" id="shareResult">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+                <button class="screenshot-btn" onclick="takeScreenshot()">
+                    🕉 Capture Divine Moment 🕉
+                </button>
+            </div>
+        </div>
+        <div class="faq-section">
+            <h2>॥ Divine Knowledge ॥</h2>
+            <div class="faq-item">
+                <div class="faq-question">
+                    What is Numerology in Vedic Tradition?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    <img src="Numerology Symbols.jpg" alt="Numerology Symbols"
+                        style="float:right;margin:0 0 10px 10px;width:200px;">
+                    Imagine each letter of your name as a magical number! Just like how you count your toys, in Vedic
+                    numerology, we count the special energy of each letter. A is like 1 sun, B is like 2 moons, and so
+                    on. When we add these numbers together, they tell us about your special qualities, just like how
+                    mixing different colors makes a new beautiful color!
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    How do Planets Influence Us?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    <img src="Planetary Influences.jpg" alt="Planetary Influences"
+                        style="float:left;margin:0 10px 10px 0;width:200px;">
+                    Think of planets as your celestial friends! Each planet has its own personality:
+                    - Sun is like a loving father, giving warmth and strength
+                    - Moon is like a caring mother, giving love and comfort
+                    - Mars is like a brave warrior, giving courage
+                    - Mercury is like a wise teacher, giving intelligence
+                    - Jupiter is like a kind guru, giving wisdom
+                    - Venus is like a beautiful artist, giving love and creativity
+                    - Saturn is like a strict but fair judge, teaching important lessons
+                </div>
+
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    What is Bhrigu Samhita?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    <img src="Sage Bhrigu.jpg" alt="Sage Bhrigu" style="float:right;margin:0 0 10px 10px;width:200px;">
+                    Long, long ago, there lived a very wise sage named Bhrigu. He was like a magical storyteller who
+                    wrote a special book called Bhrigu Samhita. This book is like a giant collection of everyone's life
+                    stories, written even before they were born! It's like having a magical diary that knows about your
+                    past, present, and future.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    What are Planetary Relationships?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    <img src="Relationship Types.jpg" alt="Planetary Relationships"
+                        style="float:left;margin:0 10px 10px 0;width:200px;">
+                    Just like how some of your friends get along better than others, planets also have their best
+                    friends and not-so-best friends!
+                    - Sun and Moon are best friends (like cookies and milk!)
+                    - Jupiter and Mercury love to play together
+                    - Venus and Mars have an exciting relationship
+                    - Saturn likes to teach important lessons to everyone
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    How Does Name Energy Work?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    <img src="Name Energy.jpg" alt="Name Energy" style="float:right;margin:0 0 10px 10px;width:200px;">
+                    Your name is like a beautiful melody! Each letter sings its own special note, and when we put them
+                    all together, they create your life's song. The first letter is extra special - it's like the
+                    conductor of your orchestra! That's why in Vedic astrology, we pay special attention to your name's
+                    first letter to understand which planet is your special guide.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    What are the Different Types of Relationships in Vedic Astrology?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    <img src="relationships.jpg" alt="Relationship Types"
+                        style="float:left;margin:0 10px 10px 0;width:200px;">
+                    In Vedic tradition, relationships are like different types of beautiful flowers in a garden:
+                    - Soulmate (आत्मीय): The most divine connection, blessed by the gods
+                    - Life Partner (जीवनसाथी): A harmonious union of minds and hearts
+                    - Divine Friend (दिव्य मित्र): A spiritual connection that transcends ordinary friendship
+                    - Karmic Connection (कर्मिक संबंध): A relationship meant to teach important life lessons
+                    Each type has its own special purpose in our spiritual journey!
+                </div>
+            </div>
+        </div>
+
+        <div class="blog-section">
+            <h2>॥ Ancient Wisdom Blog ॥</h2>
+            <div class="blog-card">
+                <img src="Collection of ancient Indian astrologers.jpg" alt="Ancient Indian Astrologers"
+                    class="blog-image">
+                <h3 class="blog-title">The Legacy of Ancient Indian Astrologers</h3>
+                <div class="blog-content">
+                    <p>In the mystical lands of ancient India, great sages and astrologers unlocked the secrets of the
+                        cosmos. These wise beings, through deep meditation and divine connection, developed
+                        sophisticated systems to understand human relationships and destiny.</p>
+
+                    <h4>The Great Sages</h4>
+                    <img src="Ancient Sages.jpg" alt="Ancient Sages"
+                        style="float:right;margin:0 0 10px 10px;width:200px;">
+                    <p>1. Maharishi Bhrigu: Known as the father of predictive astrology, created the legendary Bhrigu
+                        Samhita</p>
+                    <p>2. Maharishi Parasara: Developed the fundamental principles of Vedic astrology</p>
+                    <p>3. Varahamihira: Combined Western and Eastern astrological wisdom</p>
+
+                    <h4>Their Major Contributions</h4>
+                    <img src="Ancient Texts.jpg" alt="Ancient Texts"
+                        style="float:left;margin:0 10px 10px 0;width:200px;">
+                    <ul>
+                        <li>Development of the Nakshatras system</li>
+                        <li>Creation of detailed planetary combinations</li>
+                        <li>Understanding of karmic relationships</li>
+                        <li>Methods for calculating compatibility</li>
+                    </ul>
+
+                    <p>These ancient seers created complex systems that continue to guide millions in their journey of
+                        love and life.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-form">
+            <h2>॥ Divine Connection ॥</h2>
+            <p>Reach out to us for spiritual guidance and relationship insights</p>
+            <div class="input-group">
+                <label for="contact-name">Name (नाम):</label>
+                <input type="text" id="contact-name" required>
+            </div>
+            <div class="input-group">
+                <label for="contact-email">Email (ईमेल):</label>
+                <input type="email" id="contact-email" required>
+            </div>
+            <div class="input-group">
+                <label for="contact-message">Message (संदेश):</label>
+                <textarea id="contact-message" rows="4" required></textarea>
+            </div>
+            <button onclick="submitContact()">Send Message 🕉</button>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>॥ Divine Wisdom ॥</h3>
+                <ul>
+                    <li><a href="#">About Vedic Astrology</a></li>
+                    <li><a href="#">Sacred Texts</a></li>
+                    <li><a href="#">Spiritual Guidance</a></li>
+                    <li><a href="#">Ancient Traditions</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>॥ Sacred Services ॥</h3>
+                <ul>
+                    <li><a href="#">Relationship Reading</a></li>
+                    <li><a href="#">Compatibility Analysis</a></li>
+                    <li><a href="#">Spiritual Counseling</a></li>
+                    <li><a href="#">Divine Guidance</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>॥ Connect ॥</h3>
+                <ul>
+                    <li><a href="#">Sacred Newsletter</a></li>
+                    <li><a href="#">Divine Community</a></li>
+                    <li><a href="#">Spiritual Blog</a></li>
+                    <li><a href="#">Contact Temple</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>॥ Om Namah Shivaya ॥</p>
+            <p>© 2024 Soul Sync Calculator. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Numerological value assignment (A=1, B=2, etc.)
+        const letterValues = {};
+        for (let i = 0; i < 26; i++) {
+            letterValues[String.fromCharCode(65 + i)] = i + 1;
+        }
+
+        // Planet rulerships for first letters with Sanskrit names
+        const planetRulerships = {
+            A: 'Sun (सूर्य)', B: 'Jupiter (बृहस्पति)', C: 'Mars (मंगल)',
+            D: 'Venus (शुक्र)', E: 'Mercury (बुध)', F: 'Moon (चंद्र)',
+            G: 'Saturn (शनि)', H: 'Rahu (राहु)', I: 'Sun (सूर्य)',
+            J: 'Jupiter (बृहस्पति)', K: 'Mars (मंगल)', L: 'Venus (शुक्र)',
+            M: 'Mercury (बुध)', N: 'Moon (चंद्र)', O: 'Saturn (शनि)',
+            P: 'Mars (मंगल)', Q: 'Sun (सूर्य)', R: 'Jupiter (बृहस्पति)',
+            S: 'Moon (चंद्र)', T: 'Mars (मंगल)', U: 'Sun (सूर्य)',
+            V: 'Venus (शुक्र)', W: 'Saturn (शनि)', X: 'Rahu (राहु)',
+            Y: 'Venus (शुक्र)', Z: 'Saturn (शनि)'
+        };
+
+        // Planet compatibility scores with descriptions
+        const planetCompatibility = {
+            'Sun-Moon': { score: 95, description: 'Divine Union (दिव्य मिलन)' },
+            'Sun-Mercury': { score: 85, description: 'Intellectual Bond (बौद्धिक बंधन)' },
+            'Sun-Venus': { score: 75, description: 'Creative Partnership (सृजनात्मक साझेदारी)' },
+            'Moon-Venus': { score: 90, description: 'Emotional Harmony (भावनात्मक सामंजस्य)' },
+            'Moon-Mercury': { score: 85, description: 'Mental Connection (मानसिक संबंध)' },
+            'Mercury-Venus': { score: 80, description: 'Balanced Union (संतुलित मिलन)' },
+            'Jupiter-Venus': { score: 85, description: 'Spiritual Bond (आध्यात्मिक बंधन)' },
+            'Mars-Venus': { score: 70, description: 'Passionate Connection (जोशीला संबंध)' },
+            'Saturn-Venus': { score: 60, description: 'Karmic Relationship (कार्मिक रिश्ता)' }
+        };
+
+        function getNameNumber(name) {
+            return name.toUpperCase().split('').reduce((sum, letter) => {
+                return sum + (letterValues[letter] || 0);
+            }, 0);
+        }
+
+        function reduceToSingleDigit(num) {
+            while (num > 9) {
+                num = String(num).split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+            }
+            return num;
+        }
+
+        function getPlanetaryCompatibility(name1, name2) {
+            const planet1 = planetRulerships[name1[0].toUpperCase()];
+            const planet2 = planetRulerships[name2[0].toUpperCase()];
+            const key = `${planet1.split(' ')[0]}-${planet2.split(' ')[0]}`;
+            return planetCompatibility[key] || { score: 70, description: 'Neutral Connection (तटस्थ संबंध)' };
+        }
+
+        function determineRelationshipType(score, gender) {
+            if (gender === 'male') {
+                if (score > 90) return 'Divine Soulmate (दिव्य आत्मीय)';
+                if (score > 80) return 'Destined Wife (भाग्यशाली पत्नी)';
+                if (score > 70) return 'Spiritual Partner (आध्यात्मिक साथी)';
+                if (score > 60) return 'Karmic Friend (कर्मिक मित्र)';
+                return 'Divine Acquaintance (दैवी परिचित)';
+            } else {
+                if (score > 90) return 'Divine Soulmate (दिव्य आत्मीय)';
+                if (score > 80) return 'Destined Husband (भाग्यशाली पति)';
+                if (score > 70) return 'Spiritual Partner (आध्यात्मिक साथी)';
+                if (score > 60) return 'Karmic Friend (कर्मिक मित्र)';
+                return 'Divine Acquaintance (दैवी परिचित)';
+            }
+        }
+
+        function calculateCompatibility() {
+            const gender = document.getElementById('gender').value;
+            const name1 = document.getElementById('name1').value;
+            const name2 = document.getElementById('name2').value;
+
+            if (!gender || !name1 || !name2) {
+                alert('Please fill in all fields 🙏');
+                return;
+            }
+
+            const num1 = reduceToSingleDigit(getNameNumber(name1));
+            const num2 = reduceToSingleDigit(getNameNumber(name2));
+            const planetaryInfo = getPlanetaryCompatibility(name1, name2);
+
+            // Final compatibility calculation
+            const numerologyScore = 100 - Math.abs(num1 - num2) * 5;
+            const finalScore = Math.round((numerologyScore + planetaryInfo.score) / 2);
+
+            const relationship = determineRelationshipType(finalScore, gender);
+
+            // Display results
+            const resultContainer = document.getElementById('result');
+            resultContainer.style.display = 'block';
+            resultContainer.querySelector('.relationship-type').textContent = relationship;
+            resultContainer.querySelector('.compatibility-percentage').textContent = `${finalScore}%`;
+
+            // Show calculation steps with Sanskrit terms
+            const steps = `
+                Divine Calculations (दैवी गणना):
+                1. Name Numerology (नाम अंक): 
+                   ${name1} = ${num1} (आपका अंक)
+                   ${name2} = ${num2} (साथी का अंक)
+                   
+                2. Planetary Influence (ग्रह प्रभाव):
+                   Your Ruling Planet: ${planetRulerships[name1[0].toUpperCase()]}
+                   Partner's Ruling Planet: ${planetRulerships[name2[0].toUpperCase()]}
+                   
+                3. Connection Type: ${planetaryInfo.description}
+                   
+                4. Final Divine Score: ${finalScore}% (दैवी अंक)
+            `;
+            resultContainer.querySelector('.calculation-steps').textContent = steps;
+
+            // Show detailed planetary information
+            const planetaryDetails = `
+                Planetary Wisdom (ग्रह ज्ञान):
+                ${planetaryInfo.description}
+                This connection is blessed by the divine energies of your ruling planets.
+                May this union be guided by cosmic grace! 🕉
+            `;
+            resultContainer.querySelector('.planetary-info').textContent = planetaryDetails;
+            // Add this right after the initial validation in calculateCompatibility()
+            const storageData = {
+                name1: name1,
+                name2: name2,
+                gender: gender,
+                timestamp: new Date().toLocaleString()
+            };
+
+            // Get existing data
+            let existingData = JSON.parse(localStorage.getItem('soulSyncData') || '[]');
+            existingData.push(storageData);
+
+            // Save to localStorage
+            localStorage.setItem('soulSyncData', JSON.stringify(existingData));
+        }
+
+        // FAQ Toggle
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                faqItem.classList.toggle('active');
+                const span = question.querySelector('span');
+                span.textContent = faqItem.classList.contains('active') ? '-' : '+';
+            });
+        });
+
+        function submitContact() {
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+
+            if (!name || !email || !message) {
+                alert('Please fill in all fields 🙏');
+                return;
+            }
+
+            alert('Om Namah Shivaya 🕉\nThank you for reaching out. We will connect with you soon!');
+            // Reset form
+            document.getElementById('contact-name').value = '';
+            document.getElementById('contact-email').value = '';
+            document.getElementById('contact-message').value = '';
+        }
+        //newwww
+        // Add a share button to the result container
+        document.querySelector('.result-container').innerHTML += `
+    <button onclick="showShare()" class="screenshot-btn" style="margin-top: 2rem;">
+        Share Divine Connection 🕉
+    </button>
+`;
+
+        function showShare() {
+            const name1 = document.getElementById('name1').value;
+            const name2 = document.getElementById('name2').value;
+            const relationship = document.querySelector('.relationship-type').textContent;
+            const score = document.querySelector('.compatibility-percentage').textContent;
+            const calculations = document.querySelector('.calculation-steps').textContent;
+            const planetaryInfo = document.querySelector('.planetary-info').textContent;
+
+            const shareContent = `
+        <div style="text-align: center;">
+            <h3 style="color: #FF9933; margin-bottom: 1rem; font-size: clamp(1.2rem, 4vw, 1.5rem);">${name1} & ${name2}</h3>
+            <div style="font-size: clamp(1.3rem, 4vw, 1.8rem); color: #FF9933; margin-bottom: 1rem;">${relationship}</div>
+            <div style="font-size: clamp(1.8rem, 5vw, 2.5rem); color: #FF9933; margin-bottom: 1.5rem;">${score}</div>
+            <div style="text-align: left; margin-bottom: 1rem; font-size: clamp(0.9rem, 3vw, 1rem);">${calculations}</div>
+            <div style="text-align: left; font-size: clamp(0.9rem, 3vw, 1rem);">${planetaryInfo}</div>
+        </div>
+    `;
+
+            document.getElementById('shareResult').innerHTML = shareContent;
+            document.getElementById('shareModal').style.display = 'flex';
+        }
+
+        function closeShare() {
+            document.getElementById('shareModal').style.display = 'none';
+        }
+
+        function takeScreenshot() {
+            // Alert for demonstration - in a real implementation, you'd use html2canvas or similar
+            alert('🕉 Screenshot captured! In a real implementation, this would save an image of your divine connection.');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function (event) {
+            const modal = document.getElementById('shareModal');
+            if (event.target === modal) {
+                closeShare();
+            }
+        }
+    </script>
+</body>
+
+</html>
