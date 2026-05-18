@@ -1,0 +1,31 @@
+{
+  "name": "soul-sync-calculator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayanpandit/soul-sync-calculator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ayanpandit/soul-sync-calculator/issues"
+  },
+  "homepage": "https://github.com/ayanpandit/soul-sync-calculator#readme",
+  "dependencies": {
+    "@prisma/client": "^6.15.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "prisma": "^6.15.0"
+  }
+}

@@ -807,6 +807,8 @@
             'Saturn-Venus': { score: 60, description: 'Karmic Relationship (कार्मिक रिश्ता)' }
         };
 
+        const API_BASE_URL = 'http://localhost:3000';
+
         function getNameNumber(name) {
             return name.toUpperCase().split('').reduce((sum, letter) => {
                 return sum + (letterValues[letter] || 0);
@@ -830,20 +832,54 @@
         function determineRelationshipType(score, gender) {
             if (gender === 'male') {
                 if (score > 90) return 'Divine Soulmate (दिव्य आत्मीय)';
-                if (score > 80) return 'Destined Wife (भाग्यशाली पत्नी)';
+                if (score > 80) {
+                    playDestinyAudio();
+                    return 'Destined Wife (भाग्यशाली पत्नी)';
+                }
                 if (score > 70) return 'Spiritual Partner (आध्यात्मिक साथी)';
                 if (score > 60) return 'Karmic Friend (कर्मिक मित्र)';
                 return 'Divine Acquaintance (दैवी परिचित)';
             } else {
                 if (score > 90) return 'Divine Soulmate (दिव्य आत्मीय)';
-                if (score > 80) return 'Destined Husband (भाग्यशाली पति)';
+                if (score > 80) {
+                    playDestinyAudio();
+                    return 'Destined Husband (भाग्यशाली पति)';
+                }
                 if (score > 70) return 'Spiritual Partner (आध्यात्मिक साथी)';
                 if (score > 60) return 'Karmic Friend (कर्मिक मित्र)';
                 return 'Divine Acquaintance (दैवी परिचित)';
             }
         }
 
-        function calculateCompatibility() {
+        function playDestinyAudio() {
+            const audio = document.getElementById('destinyAudio');
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play().catch(error => {
+                    console.log('Audio playback failed:', error);
+                });
+            }
+        }
+
+        async function saveFormDataToDatabase(name1, name2, gender) {
+            const response = await fetch(`${API_BASE_URL}/api/entries`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name1,
+                    name2,
+                    gender
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save data');
+            }
+        }
+
+        async function calculateCompatibility() {
             const gender = document.getElementById('gender').value;
             const name1 = document.getElementById('name1').value;
             const name2 = document.getElementById('name2').value;
@@ -894,45 +930,13 @@
                 May this union be guided by cosmic grace! 🕉
             `;
             resultContainer.querySelector('.planetary-info').textContent = planetaryDetails;
-            // Add this right after the initial validation in calculateCompatibility()
-            const storageData = {
-                name1: name1,
-                name2: name2,
-                gender: gender,
-                timestamp: new Date().toLocaleString()
-            };
 
-            // Get existing data
-            let existingData = JSON.parse(localStorage.getItem('soulSyncData') || '[]');
-            existingData.push(storageData);
-
-            // Save to localStorage
-            localStorage.setItem('soulSyncData', JSON.stringify(existingData));
-            async function submitToSheet() {
-                const data = {
-                    timestamp: new Date().toLocaleString(),
-                    gender: document.getElementById('gender').value,
-                    name1: document.getElementById('name1').value,
-                    name2: document.getElementById('name2').value
-                };
-
-                try {
-                    const response = await fetch('https://script.google.com/macros/s/AKfycbzdPGZYlEa11VdnR2YQVHVmt9RKiJ2mkuczBPgge66guDT5X8QOV4FZi-TzhWsZVjlG/exec', {
-                        method: 'POST',
-                        body: JSON.stringify(data)
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                }
+            try {
+                await saveFormDataToDatabase(name1, name2, gender);
+            } catch (error) {
+                console.error('Error saving data:', error);
+                alert('Compatibility calculated, but saving to database failed. Please ensure the backend is running.');
             }
-
-            // Then modify the existing calculateCompatibility() function
-            // Add this line right before the final closing brace:
-            submitToSheet();
         }
 
         // FAQ Toggle
@@ -1007,41 +1011,6 @@
                 closeShare();
             }
         }
-//audio ka function
-function determineRelationshipType(score, gender) {
-        if (gender === 'male') {
-            if (score > 90) return 'Divine Soulmate (दिव्य आत्मीय)';
-            if (score > 80) {
-                playDestinyAudio(); // Play audio only for Destined Wife
-                return 'Destined Wife (भाग्यशाली पत्नी)';
-            }
-            if (score > 70) return 'Spiritual Partner (आध्यात्मिक साथी)';
-            if (score > 60) return 'Karmic Friend (कर्मिक मित्र)';
-            return 'Divine Acquaintance (दैवी परिचित)';
-        } else {
-            if (score > 90) return 'Divine Soulmate (दिव्य आत्मीय)';
-            if (score > 80) {
-                playDestinyAudio(); // Play audio only for Destined Husband
-                return 'Destined Husband (भाग्यशाली पति)';
-            }
-            if (score > 70) return 'Spiritual Partner (आध्यात्मिक साथी)';
-            if (score > 60) return 'Karmic Friend (कर्मिक मित्र)';
-            return 'Divine Acquaintance (दैवी परिचित)';
-        }
-    }
-
-    // Add this new function to handle audio playback
-    function playDestinyAudio() {
-        const audio = document.getElementById('destinyAudio');
-        if (audio) {
-            // Reset the audio to start
-            audio.currentTime = 0;
-            // Play the audio with error handling
-            audio.play().catch(error => {
-                console.log('Audio playback failed:', error);
-            });
-        }
-    }
     </script>
 </body>
 

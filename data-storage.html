@@ -148,40 +148,30 @@
     </div>
 
     <script>
-        // Listen for storage events from the main page
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'soulSyncData') {
-                displayData();
-            }
-        });
+        const API_BASE_URL = 'http://localhost:3000';
+        let currentEntries = [];
 
-        // Function to save data (to be called from main page)
-        function saveFormData(name1, name2, gender) {
-            const timestamp = new Date().toLocaleString();
-            const data = {
-                timestamp,
-                name1,
-                name2,
-                gender
-            };
-
-            // Get existing data
-            let existingData = JSON.parse(localStorage.getItem('soulSyncData') || '[]');
-            existingData.push(data);
-            
-            // Save updated data
-            localStorage.setItem('soulSyncData', JSON.stringify(existingData));
-            
-            // Update display
-            displayData();
-        }
-
-        // Function to display data
-        function displayData() {
+        async function displayData() {
             const tableBody = document.getElementById('tableBody');
-            const data = JSON.parse(localStorage.getItem('soulSyncData') || '[]');
-            
-            if (data.length === 0) {
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/entries`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch records');
+                }
+
+                currentEntries = await response.json();
+            } catch (error) {
+                console.error('Error loading records:', error);
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="no-data">Could not load records. Start backend with: npm start</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            if (currentEntries.length === 0) {
                 tableBody.innerHTML = `
                     <tr>
                         <td colspan="4" class="no-data">No records found</td>
@@ -190,9 +180,9 @@
                 return;
             }
 
-            tableBody.innerHTML = data.map(entry => `
+            tableBody.innerHTML = currentEntries.map(entry => `
                 <tr>
-                    <td>${entry.timestamp}</td>
+                    <td>${new Date(entry.timestamp).toLocaleString()}</td>
                     <td>${entry.name1}</td>
                     <td>${entry.name2}</td>
                     <td>${entry.gender}</td>
@@ -200,18 +190,29 @@
             `).join('');
         }
 
-        // Function to clear all data
-        function clearData() {
-            if (confirm('Are you sure you want to clear all records?')) {
-                localStorage.removeItem('soulSyncData');
-                displayData();
+        async function clearData() {
+            if (!confirm('Are you sure you want to clear all records?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/entries`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to clear records');
+                }
+
+                await displayData();
+            } catch (error) {
+                console.error('Error clearing records:', error);
+                alert('Failed to clear records. Ensure backend is running.');
             }
         }
 
-        // Function to export data
         function exportData() {
-            const data = localStorage.getItem('soulSyncData') || '[]';
-            const blob = new Blob([data], { type: 'application/json' });
+            const blob = new Blob([JSON.stringify(currentEntries, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -222,7 +223,6 @@
             URL.revokeObjectURL(url);
         }
 
-        // Initial display
         displayData();
     </script>
 </body>
