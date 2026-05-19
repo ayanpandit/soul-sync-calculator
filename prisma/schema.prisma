@@ -1,7 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
+// Prisma schema for SoulSyncCalculator data storage
+// Save this as prisma/schema.prisma
 
 generator client {
   provider = "prisma-client-js"
@@ -12,10 +10,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model CompatibilityEntry {
+model SoulSyncResult {
   id        Int      @id @default(autoincrement())
-  timestamp DateTime @default(now())
-  name1     String
-  name2     String
+  date      DateTime
+  time      String
   gender    String
+  yourName  String
+  theirName String
+  result    String
 }
