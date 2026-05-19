@@ -217,16 +217,19 @@ export default function SoulSyncCalculator() {
   const [contactEmail, setContactEmail] = useState("");
   const [contactMessage, setContactMessage] = useState("");
   const audioRef = useRef(null);
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3001";
+  const sheetDbUrl = import.meta.env.VITE_SHEETDB_URL;
 
   const saveResult = async (payload) => {
     setSaveStatus("saving");
     setSaveError("");
     try {
-      const response = await fetch(`${apiBaseUrl}/api/results`, {
+      if (!sheetDbUrl) {
+        throw new Error("Missing VITE_SHEETDB_URL");
+      }
+      const response = await fetch(sheetDbUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ data: [payload] }),
       });
 
       if (!response.ok) {
@@ -271,8 +274,8 @@ export default function SoulSyncCalculator() {
       date: now.toISOString(),
       time,
       gender,
-      yourName: name1,
-      theirName: name2,
+      your_name: name1,
+      their_name: name2,
       result: `${relationship} (${finalScore}%)`,
     });
   };
